@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TDSAssignment</string>
+    <string name="young">e&lt;18</string>
+    <string name="middle">18&lt;e&lt;60</string>
+    <string name="old">60&lt;e</string>
+
+
+
+</resources>
