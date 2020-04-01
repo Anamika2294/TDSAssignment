@@ -16,16 +16,16 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import okhttp3.ResponseBody
-import rx.Subscriber
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.provider.ContactsContract
+
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import rx.Observer
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import rx.Subscription
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     var listLessEighteen : MutableList<Datum> = ArrayList()
     var listMiddleAge : MutableList<Datum> = ArrayList()
     var listOlderAge : MutableList<Datum> = ArrayList()
+    lateinit var sub: Subscription
 
 
 
@@ -55,7 +56,8 @@ class MainActivity : AppCompatActivity() {
         val r = Random
         val ranNum=r.nextInt(90-30)+30
         Log.v("Number","Range"+ranNum)
-        Observable.interval(0,ranNum.toLong(),TimeUnit.SECONDS)
+
+        sub=Observable.interval(0,ranNum.toLong(),TimeUnit.SECONDS)
             .flatMap {
                 return@flatMap Observable.create<Boolean> { emitter ->
                     Log.d("IntervalExample", "Create")
@@ -163,6 +165,12 @@ class MainActivity : AppCompatActivity() {
         Log.v("OlderAge",""+listOlderAge.size)
         oldCount.text= listOlderAge.size.toString()
         listOlderAge.clear()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sub.unsubscribe()
     }
 
 
